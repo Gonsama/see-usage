@@ -6,7 +6,7 @@ import argparse
 import os
 from fnmatch import fnmatch
 
-#this function visits the graph to compute the satisfaction percent of the clients at the graph's actual state (when hiding api members)
+#this function visits the graph to compute the satisfaction percent of the clients at the graph's current state (when hiding api members)
 def get_satisfaction_percent(G, G_top, nb_of_clients):
     """returns the satisfaction percent of the clients with actual graph"""
     unsatisfied_clients = 0    
@@ -17,16 +17,27 @@ def get_satisfaction_percent(G, G_top, nb_of_clients):
             if G.edges[n,m]['hidden'] == 1:
                 unsatisfied_clients += 1
                 break
-    #print (nb_of_clients, unsatisfied_clients)
+
     satisfaction_percent = (nb_of_clients - unsatisfied_clients) / float(nb_of_clients) * 100
-    #print satisfaction_percent
 
     return satisfaction_percent
+
+def sort_by_degree(list_of_nodes, G):
+    """sort list of nodes l by degree of nodes in graph G"""
+    tuples_list = []
+    for node in list_of_nodes:
+        degree = G.degree(node)
+        tuples_list.append((node, degree))
+
+    #sort list so that degrees are in ascending order
+    tuples_list_sorted = sorted(tuples_list, key=lambda tup: tup[1])    
+    sorted_list = [n for n,d in tuples_list_sorted]
+    return sorted_list    
 
 #command-line arguments
 parser = argparse.ArgumentParser(description='Welcome!')
 parser.add_argument("--path", required=True, type=str, help="path to the repertory of a certain library or of multiple libraries")
-parser.add_argument("--percent", default=70, type=int, help="reuse-core percentage wanted")
+parser.add_argument("--percent", default=50, type=int, help="reuse-core percentage wanted")
 args = parser.parse_args()
 
 #getting path to subdirectories containing a library-usage.csv file
@@ -87,9 +98,11 @@ for path in chosen_libraries_path:
     nb_of_clients = len(clients_nodes)
     reuse_core = api_members_nodes.copy()
 
-    #top = clients, bottom = api_members
-    B_top = {n for n, d in B.nodes(data=True) if d['bipartite']==0}
-    B_bottom = set(B) - B_top
+    #top and bottom represents the two sets of the bipartite graph
+    #the order of the bottom is very important because the first elements are being considered first (to be removed)
+    #we chose to sort by degree of nodes in ascending order (list is first sorted by strings so that nodes with same degree will be in the same order too)
+    B_top = clients_nodes
+    B_bottom = sort_by_degree(sorted(api_members_nodes), B)
 
     #hiding edges going to 1 api_member at a time until satisfaction percent is equal or greater than reuse_core_percentage
     for n in B_bottom:
@@ -98,6 +111,7 @@ for path in chosen_libraries_path:
             B.edges[c,n]['hidden'] = 1
         
         #reversing the process of hiding if the satisfaction percent is too low
+        #as it is an iterator, we have to call neigbors again
         neighbor_clients = B.neighbors(n)
         if get_satisfaction_percent(B, B_top, nb_of_clients) < reuse_core_percentage:
             for c in neighbor_clients:
