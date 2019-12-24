@@ -37,7 +37,7 @@ def get_timestamp(path):
 
     #properties file doesnt exist
 
-    # example of split path : ['csv-data', 'commons-cli', 'commons-cli', '20040117.000000']
+    # example of split path : ['csv-data', 'commons-cli', 'commons-cli', '1.3']
     split_path = re.split(':|/',path) 
 
     url = 'https://search.maven.org/solrsearch/select?q=g:"' + split_path[1] + '"%20AND%20a:"' + split_path[2] + '"%20AND%20v:"' + split_path[3] + '"&wt=json'
@@ -89,16 +89,18 @@ parser.add_argument("--lp", required=True, type=str, help="path to the repertory
 parser.add_argument("--p", nargs="+", type=int, help="Reuse-core percent values we want in plot (1 or more values)")
 parser.add_argument('--sot', default=False, action='store_true', help="Space between versions (x-axis) scales according to time between them. Default behaviour is equal space between each versions")
 parser.add_argument("--o", default="reuse-core", type=str, help="file name for the output png")
+parser.add_argument("--regex", default = "a^", type=str, help="regex defining the versions that we don't want to see on the graph")
 args = parser.parse_args()
 
-######################
+#########################################
 #Getting data to plot (reuse-core sizes)#
-######################
+#########################################
 
 root_directory = args.lp
 
-#getting all versions (path, timestamp) tuple
-versions_tuple= [(x[0],get_timestamp(x[0])) for x in os.walk(args.lp) if x[0] != args.lp]
+#getting all versions (path, timestamp) tuple that are not matching regex
+regex = re.compile( args.regex)
+versions_tuple= [(x[0],get_timestamp(x[0])) for x in os.walk(args.lp) if x[0] != root_directory and not regex.search(x[0])]
 
 reuse_core_sizes = {}
 #init dict key = reuse-core percent, value = list of sizes
