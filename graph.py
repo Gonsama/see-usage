@@ -1,10 +1,8 @@
 import utils
 import argparse
 import os
-from fnmatch import fnmatch
 import matplotlib.pyplot as plt
 import matplotlib.dates as md
-import requests
 import re
 import random
 from datetime import datetime

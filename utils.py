@@ -1,6 +1,8 @@
 import os
 import json
 import csv
+import re
+import requests
 
 def get_csv_rows_nb(path):
     """return number of rows of a file whose path is given"""
