@@ -29,7 +29,7 @@ parser.add_argument("--lp", required=True, type=str, help="path to the repertory
 parser.add_argument("--p", nargs="+", type=int, help="Reuse-core percent values we want in plot (1 or more values)")
 parser.add_argument("--type",type=int, choices={1, 2}, default = 1, help="Type of plot: 1.evolution of reuse-core-size; 2.evolution of ratio reuse-core-size/total-used-api-size")
 parser.add_argument('--sot', default=False, action='store_true', help="Space between versions (x-axis) scales according to time between them. Default behaviour is equal space between each versions")
-parser.add_argument("--o", default="reuse-core", type=str, help="file name for the output png")
+parser.add_argument("--o", default="graph", type=str, help="file name for the output png")
 parser.add_argument("--regex", default = "a^", type=str, help="regex defining the versions that we don't want to see on the graph")
 args = parser.parse_args()
 
