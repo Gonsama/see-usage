@@ -39,12 +39,12 @@ def get_timestamp_from_json(json_data):
     docs_data = response_data["docs"]
     #if no timestamp
     if len(docs_data) == 0:
-        return 0
+        return -1
     else:
         return docs_data[0]["timestamp"]
 
 def get_timestamp(path):
-    """return timestamp of library specified by path"""
+    """return timestamp of library specified by path, returns -1 if no timestamp"""
 
     #look for properties file first, if it doesn't exist request REST api for the properties
     if os.path.isfile(path + "/properties.json"):
@@ -69,7 +69,7 @@ def get_timestamp(path):
         myResponse = requests.get(url)
     except requests.exceptions.RequestException as e:
         print (e)
-        return 0
+        return -1
 
     # For successful API call, response code will be 200 (OK)
     if(myResponse.ok):
@@ -89,5 +89,5 @@ def get_timestamp(path):
         # If response code is not ok (200)
         print ("Response to get properties of " + path + " is not OK")
         myResponse.raise_for_status()
-        return 0 
+        return -1
 

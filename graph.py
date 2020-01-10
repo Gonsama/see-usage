@@ -39,8 +39,12 @@ root_directory = args.lp
 
 #getting all versions (path, timestamp) tuple that are not matching regex
 regex = re.compile( args.regex)
-versions_tuple= [(x[0],utils.get_timestamp(x[0])) for x in os.walk(args.lp) if x[0] != root_directory and not regex.search(x[0]) and utils.get_csv_rows_nb(x[0] + "/library-usage.csv") != 0]
-
+versions_tuple = []
+for x in os.walk(args.lp):
+    if x[0] != root_directory and not regex.search(x[0]) and utils.get_csv_rows_nb(x[0] + "/library-usage.csv") != 0:
+        timestamp = utils.get_timestamp(x[0])
+        if timestamp != -1:        
+            versions_tuple.append((x[0],timestamp))
 y_data = {}
 #init dict key = reuse-core percent, value = list of sizes
 for percent in args.p:
