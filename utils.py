@@ -3,6 +3,7 @@ import json
 import csv
 import re
 import requests
+from fnmatch import fnmatch
 
 def get_csv_rows_nb(path):
     """return number of rows of a file whose path is given"""
@@ -43,6 +44,15 @@ def get_unique_clients(path):
     clients = [x[0] + ":" + x[1] + ":" + x[2] for x in csv_data]
     unique_clients = set(clients)           
     return len(unique_clients)
+
+def get_paths_containing_pattern(root_directory, pattern):
+    """getting path to subdirectories containing pattern"""
+    subdirectories_path = []
+    for path, subdirs, files in os.walk(root_directory):
+        for name in files:
+            if fnmatch(name, pattern):
+                subdirectories_path.append(path)
+    return subdirectories_path
 
 def get_timestamp_from_json(json_data):
     """return timestamp of library specified by json data"""

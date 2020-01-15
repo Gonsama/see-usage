@@ -4,7 +4,7 @@ import csv
 import sys
 import argparse
 import os
-from fnmatch import fnmatch
+import utils
 
 #this function visits the graph to compute the satisfaction percent of the clients at the graph's current state (when hiding api members)
 def get_satisfaction_percent(G, G_top, nb_of_clients):
@@ -43,11 +43,7 @@ args = parser.parse_args()
 #getting path to subdirectories containing a library-usage.csv file
 root_directory = args.path
 pattern = "*library-usage.csv"
-chosen_libraries_path = []
-for path, subdirs, files in os.walk(root_directory):
-    for name in files:
-        if fnmatch(name, pattern):
-            chosen_libraries_path.append(path)
+chosen_libraries_path = utils.get_paths_containing_pattern(root_directory, pattern)
 
 
 for path in chosen_libraries_path:
