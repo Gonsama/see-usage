@@ -42,7 +42,7 @@ def get_unique_clients(path):
     csv_data = get_csv_rows(path)    
     clients = [x[0] + ":" + x[1] + ":" + x[2] for x in csv_data]
     unique_clients = set(clients)           
-    return len(clients)
+    return len(unique_clients)
 
 def get_timestamp_from_json(json_data):
     """return timestamp of library specified by json data"""
