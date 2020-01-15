@@ -10,6 +10,7 @@ import numpy as np
 
 parser = argparse.ArgumentParser(description='Welcome!')
 parser.add_argument("--lp", required=True, type=str, help="path to the repertory of the library (groupid + artifactid)")
+parser.add_argument("--type",type=str, choices={"usages", "members", "clients"}, default = "usages", help="Type of plot: number of usages (data), number of unique api-members or number of unique clients")
 parser.add_argument("--o", default="repartition", type=str, help="file name for the output png")
 args = parser.parse_args()
 
@@ -27,9 +28,22 @@ versions_tuple = sorted(versions_tuple, key=lambda tup: tup[1])
 
 #visit subdirectories one by one to compute the wanted values (number of rows for each version)
 y_data = []
-for path,t in versions_tuple:
-    nb_rows = utils.get_csv_rows_nb(path + "/library-usage.csv")
-    y_data.append(nb_rows)
+
+if args.type == "usages":
+    y_axis_title = "number of usages"
+    for path,t in versions_tuple:
+        nb_rows = utils.get_csv_rows_nb(path + "/library-usage.csv")
+        y_data.append(nb_rows)
+elif args.type == "members":
+    y_axis_title = "number of unique members"
+    for path,t in versions_tuple:
+        nb_unique_used_members = utils.get_unique_used_members(path + "/library-usage.csv")
+        y_data.append(nb_unique_used_members)
+elif args.type == "clients":
+    y_axis_title = "number of unique clients"
+    for path,t in versions_tuple:
+        nb_unique_clients = utils.get_unique_clients(path + "/library-usage.csv")
+        y_data.append(nb_unique_clients)
 
 versions = [path.split("/")[2] for path,t in versions_tuple]
 #space between versions will be equal
@@ -37,7 +51,6 @@ versions = [path.split("/")[2] for path,t in versions_tuple]
 x_axis = versions
 
 x_axis_title = "library version"
-y_axis_title = "number of usages"
 
 ######
 #Plot#

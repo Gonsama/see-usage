@@ -16,21 +16,33 @@ def get_csv_rows_nb(path):
         print ("File " + path + " do not exist. You should use the script to get the reuse-core before proceeding. ")
         exit()
 
-def get_unique_used_members(path):
-    """return number of unique api_members in file whose path is given"""
+def get_csv_rows(path):
+    """return rows of csv file whose path is given"""
     try:
         with open(path, 'r') as f:
             reader = csv.reader(f)
             csv_data = list(reader) 
             #first row must be deleted because it represents the column names
-            csv_data.pop(0)      
-            api_members = [x[3] + ":" + x[4] + ":" + x[5] for x in csv_data]
-            unique_api_members = set(api_members)           
+            csv_data.pop(0)                
             f.close()
-            return len(unique_api_members)
+            return csv_data
     except IOError:
         print ("File " + path + " do not exist. You should use the script to export library usage before proceeding. ")
         exit()
+
+def get_unique_used_members(path):
+    """return number of unique api members in csv file whose path is given"""
+    csv_data = get_csv_rows(path)    
+    api_members = [x[3] + ":" + x[4] + ":" + x[5] for x in csv_data]
+    unique_api_members = set(api_members)           
+    return len(unique_api_members)
+
+def get_unique_clients(path):
+    """return number of unique clients in csv file whose path is given"""
+    csv_data = get_csv_rows(path)    
+    clients = [x[0] + ":" + x[1] + ":" + x[2] for x in csv_data]
+    unique_clients = set(clients)           
+    return len(clients)
 
 def get_timestamp_from_json(json_data):
     """return timestamp of library specified by json data"""
