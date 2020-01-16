@@ -27,13 +27,14 @@ for library in libraries:
         nb_usages += utils.get_csv_rows_nb(version_path + "/library-usage.csv")
         nb_clients += utils.get_unique_clients(version_path + "/library-usage.csv")
     top_libraries.append((library ,nb_usages, nb_clients))
-    print (len(top_libraries))
-    print ((library ,nb_usages, nb_clients))
+    print (str(len(top_libraries)) + ": " + str((library ,nb_usages, nb_clients)))
 
-top_libraries_sorted = sorted(top_libraries, key=lambda tup: tup[1, reverse=True])
+top_libraries_sorted = sorted(top_libraries, key=lambda tup: tup[1],reverse=True)
 limit = args.N
 if limit > len(top_libraries_sorted):
     limit = len(top_libraries_sorted)
 
-for i in range(limit - 1):
+print ("The top " + str(limit) + " libraries are :")
+
+for i in range(limit):
     print (top_libraries_sorted[i])
