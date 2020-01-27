@@ -4,6 +4,7 @@ import csv
 import re
 import requests
 from fnmatch import fnmatch
+import math
 
 def get_csv_rows_nb(path):
     """return number of rows of a file whose path is given"""
@@ -31,19 +32,48 @@ def get_csv_rows(path):
         print ("File " + path + " do not exist. You should use the script to export library usage before proceeding. ")
         exit()
 
-def get_unique_used_members(path):
-    """return number of unique api members in csv file whose path is given"""
+def get_clients_from_usage(path):
+    """return the list of clients in library_usage file given"""
+    csv_data = get_csv_rows(path)    
+    clients = [x[0] + ":" + x[1] + ":" + x[2] for x in csv_data]
+    return clients
+
+def get_members_from_usage(path):
+    """return the list of clients in library_usage file given"""
     csv_data = get_csv_rows(path)    
     api_members = [x[3] + ":" + x[4] + ":" + x[5] for x in csv_data]
+    return api_members
+
+def get_unique_used_members(path):
+    """return number of unique api members in csv file whose path is given""" 
+    api_members = get_members_from_usage(path)
     unique_api_members = set(api_members)           
     return len(unique_api_members)
 
 def get_unique_clients(path):
-    """return number of unique clients in csv file whose path is given"""
-    csv_data = get_csv_rows(path)    
-    clients = [x[0] + ":" + x[1] + ":" + x[2] for x in csv_data]
+    """return number of unique clients in csv file whose path is given"""  
+    clients = get_clients_from_usage(path)
     unique_clients = set(clients)           
     return len(unique_clients)
+
+def get_evenness_value(data, formula):
+    if formula == "shannon":
+        unique_data = set(data)
+        n = len(unique_data)
+        #There is no diversity if only 1 species is in data        
+        if n == 1:
+            return 0
+        H = 0
+        for element in unique_data:
+            proportion = 0
+            for x in data:
+                if x == element:
+                    proportion +=1
+            H += float(proportion) * math.log10(proportion)
+        H = -H
+        evenness = H / math.log10(n)
+        print (evenness)
+        return evenness
 
 def get_paths_containing_pattern(root_directory, pattern):
     """getting path to subdirectories containing pattern"""
@@ -113,3 +143,34 @@ def get_timestamp(path):
         myResponse.raise_for_status()
         return -1
 
+def get_sorted_versions_path_timestamp(root_directory, regex):
+    """returns all versions (path, timestamp) tuple that are not matching regex in a list of tuples"""
+    regex = re.compile(regex)
+    versions_tuple = []
+    for x in os.walk(root_directory): 
+        #libraries with 0 usages not considered either
+        if x[0] != root_directory and not regex.search(x[0]) and get_csv_rows_nb(x[0] + "/library-usage.csv") != 0:
+            timestamp = get_timestamp(x[0])
+            if timestamp != -1:        
+                versions_tuple.append((x[0],timestamp))
+    #sort list so that versions are in ascending order
+    versions_tuple = sorted(versions_tuple, key=lambda tup: tup[1])
+    return versions_tuple
+
+def get_x_axis_data(sot, versions_tuple):
+    """returns a tuple where the first element is the values of the x_axis to be plotted (list) and second element is the title of the x_axis"""
+    if sot:
+        x_axis = []
+        for i in range(len(versions_tuple)-1,-1,-1):
+            #rare case where two versions have the same timestamp
+            if len(x_axis) >= 1 and versions_tuple[i][1] == x_axis[0]: 
+                x_axis.insert(0,versions_tuple[i][1] - 1)
+            else:
+                x_axis.insert(0,versions_tuple[i][1])
+        x_axis_title = "time"
+    else:
+        #space between versions will be equal
+        #split path to versions to get only versions
+        x_axis = [path.split("/")[2] for path,t in versions_tuple]
+        x_axis_title = "library version"
+    return (x_axis, x_axis_title)
