@@ -56,24 +56,38 @@ def get_unique_clients(path):
     unique_clients = set(clients)           
     return len(unique_clients)
 
-def get_evenness_value(data, formula):
+def get_diversity_value(data, formula):
+    """return a number between 0 and 1 representing the evenness of the data computed with formula"""
+    unique_data = set(data)
+    n = len(unique_data)
+    N = len(data)
+    #There is no diversity if there is only 1 species        
+    if n == 1:
+        return 0    
     if formula == "shannon":
-        unique_data = set(data)
-        n = len(unique_data)
-        #There is no diversity if only 1 species is in data        
-        if n == 1:
-            return 0
-        H = 0
+        total_sum = 0
         for element in unique_data:
-            proportion = 0
+            nb_element = 0
             for x in data:
                 if x == element:
-                    proportion +=1
-            H += float(proportion) * math.log10(proportion)
-        H = -H
+                    nb_element +=1
+            proportion = float(nb_element) / N
+            total_sum += float(proportion) * math.log10(proportion)
+        H = -total_sum
         evenness = H / math.log10(n)
-        print (evenness)
-        return evenness
+        return evenness 
+    elif formula == "simpson":
+        total_sum = 0
+        for element in unique_data:
+            nb_element = 0
+            for x in data:
+                if x == element:
+                    nb_element +=1
+            numerator = float(nb_element) * (nb_element - 1)
+            denominator = N * (N - 1)
+            total_sum += (numerator / denominator)
+        simpson_index = 1 - total_sum        
+        return simpson_index
 
 def get_paths_containing_pattern(root_directory, pattern):
     """getting path to subdirectories containing pattern"""
