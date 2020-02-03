@@ -65,29 +65,54 @@ def get_diversity_value(data, formula):
     if n == 1:
         return 0    
     if formula == "shannon":
-        total_sum = 0
-        for element in unique_data:
-            nb_element = 0
-            for x in data:
-                if x == element:
-                    nb_element +=1
-            proportion = float(nb_element) / N
-            total_sum += float(proportion) * math.log10(proportion)
-        H = -total_sum
-        evenness = H / math.log10(n)
+        evenness = get_evenness(data,unique_data,n,N)
         return evenness 
     elif formula == "simpson":
-        total_sum = 0
-        for element in unique_data:
-            nb_element = 0
-            for x in data:
-                if x == element:
-                    nb_element +=1
-            numerator = float(nb_element) * (nb_element - 1)
-            denominator = N * (N - 1)
-            total_sum += (numerator / denominator)
-        simpson_index = 1 - total_sum        
+        simpson_index = get_simpson_index(data,unique_data,n,N)       
         return simpson_index
+    elif formula == "theil":
+        theil_index = get_theil_index(data,unique_data,n,N)       
+        return theil_index
+
+def get_evenness(data,unique_data,n,N):
+    total_sum = 0
+    for element in unique_data:
+        nb_element = 0
+        for x in data:
+            if x == element:
+                nb_element +=1
+        proportion = float(nb_element) / N
+        total_sum += float(proportion) * math.log10(proportion)
+    H = -total_sum
+    evenness = H / math.log10(n)
+    return evenness
+
+def get_simpson_index(data,unique_data,n,N):
+    total_sum = 0
+    for element in unique_data:
+        nb_element = 0
+        for x in data:
+            if x == element:
+                nb_element +=1
+        numerator = float(nb_element) * (nb_element - 1)
+        denominator = N * (N - 1)
+        total_sum += (numerator / denominator)
+    simpson_index = 1 - total_sum        
+    return simpson_index
+
+def get_theil_index(data,unique_data,n,N):
+    total_sum = 0
+    mean_occurences = float(N) / n
+    for element in unique_data:
+        nb_element = 0
+        for x in data:
+            if x == element:
+                nb_element +=1
+        ratio = float(nb_element) / mean_occurences
+        total_sum += ratio * math.log10(ratio)
+    theil_index = float(total_sum) / n
+    normalized_theil_index = theil_index / math.log(n)
+    return theil_index
 
 def get_paths_containing_pattern(root_directory, pattern):
     """getting path to subdirectories containing pattern"""

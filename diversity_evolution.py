@@ -12,7 +12,7 @@ from datetime import datetime
 
 parser = argparse.ArgumentParser(description='Welcome!')
 parser.add_argument("--lp", required=True, type=str, help="path to the repertory of the library (groupid + artifactid)")
-parser.add_argument("--formula", type=str, choices={"shannon", "simpson"}, default = "shannon", help="Diversity index formula we want to use to get diversity: 1.shannon; 2.simpson")
+parser.add_argument("--formula", type=str, choices={"shannon", "simpson", "theil"}, default = "shannon", help="Diversity index formula we want to use to get diversity: 1.shannon; 2.simpson; 3.theil")
 parser.add_argument("--according", type=str, choices={"clients", "members"}, default = "clients", help="The data we want to see the diversity of (clients or members)")
 parser.add_argument('--sot', default=False, action='store_true', help="Space between versions (x-axis) scales according to time between them. Default behaviour is equal space between each versions")
 parser.add_argument("--o", default="diversity", type=str, help="file name for the output png")
@@ -81,11 +81,15 @@ plt.plot(x_axis, y_data, marker='o', color=palette(0), linewidth=1, alpha=0.9)
 for i in range(0,len(x_axis)): 
     plt.text(x_axis[i], y_data[i],  y_data[i], fontsize=12)
 
+#range of y axis changed to begin at 0
+x1,x2,y1,y2 = plt.axis()
+plt.axis((x1,x2,0,100))
+
 #legend
 plt.legend(loc=2, ncol=1)
 
 #vertical x-axis 
-plt.xticks(rotation=45)
+plt.xticks(rotation=90)
 plt.tight_layout()
 
 #titles
