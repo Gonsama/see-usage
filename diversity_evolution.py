@@ -12,7 +12,7 @@ from datetime import datetime
 
 parser = argparse.ArgumentParser(description='Welcome!')
 parser.add_argument("--lp", required=True, type=str, help="path to the repertory of the library (groupid + artifactid)")
-parser.add_argument("--formula", type=str, choices={"shannon", "simpson", "theil"}, default = "shannon", help="Diversity index formula we want to use to get diversity: 1.shannon; 2.simpson; 3.theil")
+parser.add_argument("--formula", type=str, choices={"shannon", "simpson", "theil", "gini"}, default = "shannon", help="Diversity index formula we want to use to get diversity: 1.shannon; 2.simpson; 3.theil; 4.gini")
 parser.add_argument("--according", type=str, choices={"clients", "members"}, default = "clients", help="The data we want to see the diversity of (clients or members)")
 parser.add_argument('--sot', default=False, action='store_true', help="Space between versions (x-axis) scales according to time between them. Default behaviour is equal space between each versions")
 parser.add_argument("--o", default="diversity", type=str, help="file name for the output png")
@@ -29,16 +29,22 @@ versions_tuple = utils.get_sorted_versions_path_timestamp(args.lp, args.regex)
 y_data = []
 
 #visit subdirectories one by one to compute the wanted values according to type argument
+print ("###############################")
+print ("computing diversity indexes ...")
 if args.according == "clients":
     for path,t in versions_tuple:
         clients = utils.get_clients_from_usage(path + "/library-usage.csv")
         diversity = utils.get_diversity_value(clients, args.formula)
-        y_data.append(int(diversity * 100))
+        diversity_percent = int(diversity * 100)        
+        y_data.append(diversity_percent)
+        print ("diversity index for " + path + " is " + str(diversity_percent) + "%")
 elif args.according == "members":
     for path,t in versions_tuple:
         members = utils.get_members_from_usage(path + "/library-usage.csv")
         diversity = utils.get_diversity_value(members, args.formula)
-        y_data.append(int(diversity * 100))
+        diversity_percent = int(diversity * 100)
+        y_data.append(diversity_percent)
+        print ("diversity index for " + path + " is " + str(diversity_percent) + "%")
 
 y_axis_title = "Diversity of " + args.according + " using " + args.formula + "(%)"
 

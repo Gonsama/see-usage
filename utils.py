@@ -56,6 +56,14 @@ def get_unique_clients(path):
     unique_clients = set(clients)           
     return len(unique_clients)
 
+def get_nb_occurences(element,data):
+    """return the number of times element appears in data"""
+    occurences = 0
+    for x in data:
+        if x == element:
+            occurences +=1
+    return occurences
+
 def get_diversity_value(data, formula):
     """return a number between 0 and 1 representing the evenness of the data computed with formula"""
     unique_data = set(data)
@@ -73,14 +81,14 @@ def get_diversity_value(data, formula):
     elif formula == "theil":
         theil_index = get_theil_index(data,unique_data,n,N)       
         return theil_index
+    elif formula == "gini":
+        gini_index = get_gini_index(data,unique_data,n,N)       
+        return gini_index
 
 def get_evenness(data,unique_data,n,N):
     total_sum = 0
     for element in unique_data:
-        nb_element = 0
-        for x in data:
-            if x == element:
-                nb_element +=1
+        nb_element = get_nb_occurences(element,data)
         proportion = float(nb_element) / N
         total_sum += float(proportion) * math.log10(proportion)
     H = -total_sum
@@ -90,10 +98,7 @@ def get_evenness(data,unique_data,n,N):
 def get_simpson_index(data,unique_data,n,N):
     total_sum = 0
     for element in unique_data:
-        nb_element = 0
-        for x in data:
-            if x == element:
-                nb_element +=1
+        nb_element = get_nb_occurences(element,data)
         numerator = float(nb_element) * (nb_element - 1)
         denominator = N * (N - 1)
         total_sum += (numerator / denominator)
@@ -104,15 +109,23 @@ def get_theil_index(data,unique_data,n,N):
     total_sum = 0
     mean_occurences = float(N) / n
     for element in unique_data:
-        nb_element = 0
-        for x in data:
-            if x == element:
-                nb_element +=1
+        nb_element = get_nb_occurences(element,data)
         ratio = float(nb_element) / mean_occurences
         total_sum += ratio * math.log10(ratio)
     theil_index = float(total_sum) / n
     normalized_theil_index = theil_index / math.log(n)
     return theil_index
+
+def get_gini_index(data,unique_data,n,N):
+    mean_occurences = float(N) / n
+    double_sum = 0
+    for x in unique_data:
+        x_occurences = get_nb_occurences(x,data)
+        for y in unique_data:
+            y_occurences = get_nb_occurences(y,data)
+            double_sum += abs(x_occurences - y_occurences)
+    gini_index = (float(1) / (2 * n * n * mean_occurences)) * double_sum
+    return gini_index
 
 def get_paths_containing_pattern(root_directory, pattern):
     """getting path to subdirectories containing pattern"""
