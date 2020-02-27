@@ -64,6 +64,32 @@ def get_nb_occurences(element,data):
             occurences +=1
     return occurences
 
+def get_reusability_index(members):
+    """returns the reusability index of data specified by argument which represents the members used by a client"""
+    #if a member is present multiple times, we can be sure they are used by different clients because there is no redundancy in the data
+    unique_members = set(members)
+    #this dict contains data such that key = unique members and value = number of times it is used by different clients      
+    nb_usages = {}
+    for member in unique_members:
+        usages = get_nb_occurences(member,members)
+        nb_usages[member] = usages
+    #now that the dict is filled, we have to find the max value n such that n members are used by at least n different clients
+    minimum=0
+    maximum=len(unique_members)
+    reusability_index = 0
+    while(not minimum > maximum):
+        middle = minimum + int(((maximum - minimum) / 2))
+        counter = 0
+        for key,value in nb_usages.items():
+            if value >= middle:
+                counter += 1
+        if counter >= middle:
+            reusability_index = middle
+            minimum = middle + 1
+        else:
+            maximum = middle - 1
+    return reusability_index
+
 def get_diversity_value(data, formula):
     """return a number between 0 and 1 representing the evenness of the data computed with formula"""
     unique_data = set(data)
