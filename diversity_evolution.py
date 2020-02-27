@@ -87,7 +87,7 @@ plt.plot(x_axis, y_data, marker='o', color=palette(0), linewidth=1, alpha=0.9)
 for i in range(0,len(x_axis)): 
     plt.text(x_axis[i], y_data[i],  y_data[i], fontsize=12)
 
-#range of y axis changed to begin at 0
+#range of y axis changed to begin at 0 and finish at 100
 x1,x2,y1,y2 = plt.axis()
 plt.axis((x1,x2,0,100))
 
