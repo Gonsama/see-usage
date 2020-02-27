@@ -19,9 +19,9 @@ parser.add_argument("--o", default="diversity", type=str, help="file name for th
 parser.add_argument("--regex", default = "a^", type=str, help="regex defining the versions that we don't want to see on the graph")
 args = parser.parse_args()
 
-#########################################
-#Getting data to plot (reuse-core sizes)#
-#########################################
+##########################################
+#Getting data to plot (diversity indexes)#
+##########################################
 
 #getting all versions (path, timestamp) tuple that are not matching regex
 versions_tuple = utils.get_sorted_versions_path_timestamp(args.lp, args.regex)
