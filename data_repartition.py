@@ -69,12 +69,12 @@ plt.xticks(x_pos, x_axis)
 plt.legend(loc=2, ncol=1)
 
 #vertical x-axis 
-plt.xticks(rotation=45)
-plt.tight_layout()
+plt.xticks(rotation=90)
 
 #titles
 plt.title(root_directory, loc='center', fontsize=24, fontweight=0, color='red')
 plt.xlabel(x_axis_title)
 plt.ylabel(y_axis_title)
+plt.tight_layout()
 plt.savefig(args.o + '.png')
 plt.show()
