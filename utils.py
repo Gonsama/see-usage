@@ -74,7 +74,7 @@ def get_reusability_index(members):
         usages = get_nb_occurences(member,members)
         nb_usages[member] = usages
     #now that the dict is filled, we have to find the max value n such that n members are used by at least n different clients
-    minimum=0
+    minimum=1
     maximum=len(unique_members)
     reusability_index = 0
     while(not minimum > maximum):
