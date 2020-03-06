@@ -83,9 +83,15 @@ if args.sot:
 # unique line plot
 plt.plot(x_axis, y_data, marker='o', color=palette(0), linewidth=1, alpha=0.9)
  
-# exact value of dots xritten next to it for further precision
-for i in range(0,len(x_axis)): 
-    plt.text(x_axis[i], y_data[i],  y_data[i], fontsize=12)
+# version written next to dot if sot argument is chosen
+if args.sot:
+    versions = [path.split("/")[2] for path,t in versions_tuple]
+    for i in range(0,len(x_axis)): 
+        plt.text(x_axis[i], y_data[i],  versions[i], fontsize=9)
+# exact value of dots written next to it for further precision otherwise
+else:
+    for i in range(0,len(x_axis)): 
+        plt.text(x_axis[i], y_data[i],  y_data[i], fontsize=12)
 
 #range of y axis changed to begin at 0 and finish at 100
 x1,x2,y1,y2 = plt.axis()
