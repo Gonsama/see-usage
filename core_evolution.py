@@ -32,12 +32,16 @@ y_data = {}
 for percent in args.p:
     y_data[percent] = []
 
+print ("###############################")
+print ("computing reuse-core sizes ...")
+
 #visit subdirectories one by one to compute the wanted values according to type argument
 if args.type == 1:
     for path,t in versions_tuple:
         for percent in args.p:
             size = utils.get_csv_rows_nb(path + "/reuse-core-" + str(percent) + ".csv")
             y_data[percent].append(size)
+            print ("Reuse-core size of " +  str(percent) + "% for " + path + " is " + str(size))
     y_axis_title = "reuse-core-size"
 elif args.type == 2:
     for path,t in versions_tuple:
@@ -46,6 +50,7 @@ elif args.type == 2:
             total_used_api_size = utils.get_unique_used_members(path + "/library-usage.csv")
             ratio = reuse_core_size / float(total_used_api_size)
             y_data[percent].append(ratio)
+            print ("Ratio size of " +  str(percent) + "% for " + path + " is " + str(ratio))
     y_axis_title = "RATIO reuse-core-size / total-used-api-members"
 
 #x-axis of plot will be different according to sot argument
