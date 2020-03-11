@@ -12,6 +12,7 @@ parser = argparse.ArgumentParser(description='Welcome!')
 parser.add_argument("--lp", required=True, type=str, help="path to the repertory of the library (groupid + artifactid)")
 parser.add_argument("--type",type=str, choices={"usages", "members", "clients"}, default = "usages", help="Type of plot: number of usages (data), number of unique api-members or number of unique clients")
 parser.add_argument("--o", default="repartition", type=str, help="file name for the output png")
+parser.add_argument("--regex", default = "a^", type=str, help="regex defining the versions that we don't want to see on the graph. For example, .*beta.*$ means the libraries containing beta in their name shouldn't be plotted")
 args = parser.parse_args()
 
 #########################################
@@ -20,11 +21,8 @@ args = parser.parse_args()
 
 root_directory = args.lp
 
-#getting all versions (path, timestamp) tuple
-versions_tuple= [(x[0],utils.get_timestamp(x[0])) for x in os.walk(args.lp) if x[0] != root_directory]
-
-#sort list so that versions are in ascending order
-versions_tuple = sorted(versions_tuple, key=lambda tup: tup[1])
+#getting all versions (path, timestamp) tuple that are not matching regex
+versions_tuple= utils.get_sorted_versions_path_timestamp(args.lp, args.regex)
 
 print ("###############################")
 print ("computing repartitions ...")

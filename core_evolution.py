@@ -17,7 +17,7 @@ parser.add_argument("--p", nargs="+", type=int, help="Reuse-core percent values 
 parser.add_argument("--type",type=int, choices={1, 2}, default = 1, help="Type of plot: 1.evolution of reuse-core-size; 2.evolution of ratio reuse-core-size/total-used-api-size")
 parser.add_argument('--sot', default=False, action='store_true', help="Space between versions (x-axis) scales according to time between them. Default behaviour is equal space between each versions")
 parser.add_argument("--o", default="graph", type=str, help="file name for the output png")
-parser.add_argument("--regex", default = "a^", type=str, help="regex defining the versions that we don't want to see on the graph. For example, ... means the libraries containing beta in their name shouldn't be plot")
+parser.add_argument("--regex", default = "a^", type=str, help="regex defining the versions that we don't want to see on the graph. For example, .*beta.*$ means the libraries containing beta in their name shouldn't be plotted")
 args = parser.parse_args()
 
 #########################################

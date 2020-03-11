@@ -16,7 +16,7 @@ parser.add_argument("--formula", type=str, choices={"shannon", "simpson", "theil
 parser.add_argument("--according", type=str, choices={"clients", "members"}, default = "clients", help="The data we want to see the diversity of (clients or members)")
 parser.add_argument('--sot', default=False, action='store_true', help="Space between versions (x-axis) scales according to time between them. Default behaviour is equal space between each versions")
 parser.add_argument("--o", default="diversity", type=str, help="file name for the output png")
-parser.add_argument("--regex", default = "a^", type=str, help="regex defining the versions that we don't want to see on the graph")
+parser.add_argument("--regex", default = "a^", type=str, help="regex defining the versions that we don't want to see on the graph. For example, .*beta.*$ means the libraries containing beta in their name shouldn't be plotted")
 args = parser.parse_args()
 
 ##########################################
