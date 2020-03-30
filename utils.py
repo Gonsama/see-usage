@@ -98,9 +98,9 @@ def get_diversity_value(data, formula):
     #There is no diversity if there is only 1 species        
     if n == 1:
         return 0    
-    if formula == "shannon":
-        evenness = get_evenness(data,unique_data,n,N)
-        return evenness 
+    if formula == "pielou":
+        pielou_index = get_pielou_index(data,unique_data,n,N)
+        return pielou_index
     elif formula == "simpson":
         simpson_index = get_simpson_index(data,unique_data,n,N)       
         return simpson_index
@@ -111,7 +111,7 @@ def get_diversity_value(data, formula):
         gini_index = get_gini_index(data,unique_data,n,N)       
         return gini_index
 
-def get_evenness(data,unique_data,n,N):
+def get_pielou_index(data,unique_data,n,N):
     total_sum = 0
     for element in unique_data:
         nb_element = get_nb_occurences(element,data)

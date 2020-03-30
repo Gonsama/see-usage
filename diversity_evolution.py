@@ -12,7 +12,7 @@ from datetime import datetime
 
 parser = argparse.ArgumentParser(description='Welcome!')
 parser.add_argument("--lp", required=True, type=str, help="path to the repertory of the library (groupid + artifactid)")
-parser.add_argument("--formula", type=str, choices={"shannon", "simpson", "theil", "gini"}, default = "shannon", help="Diversity index formula we want to use to get diversity: 1.shannon; 2.simpson; 3.theil; 4.gini")
+parser.add_argument("--formula", type=str, choices={"pielou", "simpson", "theil", "gini"}, default = "pielou", help="Diversity index formula we want to use to get diversity: 1.pielou; 2.simpson; 3.theil; 4.gini")
 parser.add_argument("--according", type=str, choices={"clients", "members"}, default = "clients", help="The data we want to see the diversity of (clients or members)")
 parser.add_argument('--sot', default=False, action='store_true', help="Space between versions (x-axis) scales according to time between them. Default behaviour is equal space between each versions")
 parser.add_argument("--o", default="diversity", type=str, help="file name for the output png")
