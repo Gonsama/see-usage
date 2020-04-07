@@ -100,7 +100,7 @@ if args.sot:
         plt.text(x_axis[i], random_value_from_dict[i],  versions[i], fontsize=9)
  
 #legend
-plt.legend(loc=2, ncol=1)
+plt.legend(loc="best", ncol=1)
 
 #vertical x-axis 
 plt.xticks(rotation=90)
