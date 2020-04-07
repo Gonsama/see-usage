@@ -140,7 +140,7 @@ def get_theil_index(data,unique_data,n,N):
         total_sum += ratio * math.log10(ratio)
     theil_index = float(total_sum) / n
     normalized_theil_index = theil_index / math.log(n)
-    return theil_index
+    return normalized_theil_index
 
 def get_gini_index(data,unique_data,n,N):
     mean_occurences = float(N) / n
