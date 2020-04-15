@@ -137,7 +137,7 @@ def get_theil_index(data,unique_data,n,N):
     for element in unique_data:
         nb_element = get_nb_occurences(element,data)
         ratio = float(nb_element) / mean_occurences
-        total_sum += ratio * math.log10(ratio)
+        total_sum += ratio * math.log(ratio)
     theil_index = float(total_sum) / n
     normalized_theil_index = theil_index / math.log(n)
     return normalized_theil_index
