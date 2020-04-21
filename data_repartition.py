@@ -97,7 +97,7 @@ else:
     plt.xticks(rotation=90)
 
     #titles
-    plt.title(root_directory, loc='center', fontsize=24, fontweight=0, color='red')
+    plt.title(root_directory, loc='center', fontsize=24, fontweight=0, color='black')
     plt.xlabel(x_axis_title)
     plt.ylabel(y_axis_title)
     plt.tight_layout()
