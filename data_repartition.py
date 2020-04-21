@@ -4,6 +4,9 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 
+def my_autopct(pct):
+    return ('%1.1f%%' % pct) if pct > 1 else ''
+
 ########################
 #Command-line arguments#
 ########################
@@ -11,6 +14,7 @@ import numpy as np
 parser = argparse.ArgumentParser(description='Welcome!')
 parser.add_argument("--lp", required=True, type=str, help="path to the repertory of the library (groupid + artifactid)")
 parser.add_argument("--type",type=str, choices={"usages", "members", "clients"}, default = "usages", help="Type of plot: number of usages (data), number of unique api-members or number of unique clients")
+parser.add_argument('--pie', default=False, action='store_true', help="plot the repartition on a pie chart according to percentage for each versions")
 parser.add_argument("--o", default="repartition", type=str, help="file name for the output png")
 parser.add_argument("--regex", default = "a^", type=str, help="regex defining the versions that we don't want to see on the graph. For example, .*beta.*$ means the libraries containing beta in their name shouldn't be plotted")
 args = parser.parse_args()
@@ -48,9 +52,9 @@ elif args.type == "clients":
         y_data.append(nb_unique_clients)
         print ("Number of clients for " + path + " is " + str(nb_unique_clients))
 
-versions = [path.split("/")[2] for path,t in versions_tuple]
 #space between versions will be equal
 #split path to get only versions
+versions = [path.split("/")[2] for path,t in versions_tuple]
 x_axis = versions
 
 x_axis_title = "library version"
@@ -59,25 +63,44 @@ x_axis_title = "library version"
 #Plot#
 ######
 
- 
 # style
 plt.style.use('seaborn-darkgrid')
 
-#bar chart
-x_pos = np.arange(len(x_axis))
-plt.bar(x_pos, y_data, align='center', alpha=0.5)
-plt.xticks(x_pos, x_axis)
- 
-#legend
-plt.legend(loc=2, ncol=1)
+if args.pie:
+    #tuple of format (version, y_data)
+    version_repartition_tuple = [(x_axis[i], y_data[i]) for i in range(len(y_data))]
+    #sort list according to second element which is the value of the repartition in descending order
+    sorted_tuple = sorted(version_repartition_tuple, key=lambda tup: tup[1], reverse=True)
+    fig1, ax1 = plt.subplots()
+    y_data = [tup[1] for tup in sorted_tuple]
+    x_axis = [tup[0] for tup in sorted_tuple]
+    total_data = 0
+    for data in y_data:
+        total_data += data
+    for i in range(len(y_data)):
+        if y_data[i] / total_data * 100  < 1:
+            x_axis[i] = '' 
+    ax1.pie(y_data, labels=x_axis, autopct=my_autopct, startangle=90, textprops={'fontsize': 8})
+    ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+    plt.title("Repartition of " + args.type, loc='center', fontsize=16, fontweight=0, color='black')
+    plt.tight_layout()
+else: 
+    #bar chart
+    x_pos = np.arange(len(x_axis))
+    plt.bar(x_pos, y_data, align='center', alpha=0.5)
+    plt.xticks(x_pos, x_axis)
+     
+    #legend
+    plt.legend(loc=2, ncol=1)
 
-#vertical x-axis 
-plt.xticks(rotation=90)
+    #vertical x-axis 
+    plt.xticks(rotation=90)
 
-#titles
-plt.title(root_directory, loc='center', fontsize=24, fontweight=0, color='red')
-plt.xlabel(x_axis_title)
-plt.ylabel(y_axis_title)
-plt.tight_layout()
+    #titles
+    plt.title(root_directory, loc='center', fontsize=24, fontweight=0, color='red')
+    plt.xlabel(x_axis_title)
+    plt.ylabel(y_axis_title)
+    plt.tight_layout()
+
 plt.savefig(args.o + '.png')
 plt.show()
