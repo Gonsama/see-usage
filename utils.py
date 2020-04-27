@@ -221,13 +221,13 @@ def get_timestamp(path):
         myResponse.raise_for_status()
         return -1
 
-def get_sorted_versions_path_timestamp(root_directory, regex):
-    """returns all versions (path, timestamp) tuple that are not matching regex in a list of tuples"""
+def get_sorted_versions_path_timestamp(root_directory, regex, min_usages, min_clients):
+    """returns all versions (path, timestamp) tuple that are not matching regex and that have a minimum of usages and/or clients in a list of tuples"""
     regex = re.compile(regex)
     versions_tuple = []
     for x in os.walk(root_directory): 
         #libraries with 0 usages not considered either
-        if x[0] != root_directory and not regex.search(x[0]) and get_csv_rows_nb(x[0] + "/library-usage.csv") != 0:
+        if x[0] != root_directory and not regex.search(x[0]) and get_csv_rows_nb(x[0] + "/library-usage.csv") >= min_usages and get_unique_clients(x[0] + "/library-usage.csv") >= min_clients:
             timestamp = get_timestamp(x[0])
             if timestamp != -1:        
                 versions_tuple.append((x[0],timestamp))

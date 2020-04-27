@@ -17,6 +17,8 @@ parser.add_argument("--type",type=str, choices={"usages", "members", "clients"},
 parser.add_argument('--pie', default=False, action='store_true', help="plot the repartition on a pie chart according to percentage for each versions")
 parser.add_argument("--o", default="repartition", type=str, help="file name for the output png")
 parser.add_argument("--regex", default = "a^", type=str, help="regex defining the versions that we don't want to see on the graph. For example, .*beta.*$ means the libraries containing beta in their name shouldn't be plotted")
+parser.add_argument("--minusages", default=0, type=int, help="define the minimum usages of versions that will be shown")
+parser.add_argument("--minclients", default=0, type=int, help="define the minimum unique clients of versions that will be shown")
 args = parser.parse_args()
 
 #########################################
@@ -25,8 +27,8 @@ args = parser.parse_args()
 
 root_directory = args.lp
 
-#getting all versions (path, timestamp) tuple that are not matching regex
-versions_tuple= utils.get_sorted_versions_path_timestamp(args.lp, args.regex)
+#getting all versions (path, timestamp) tuple which are not matching regex and which respects the minusages/minclients args  
+versions_tuple= utils.get_sorted_versions_path_timestamp(args.lp, args.regex, args.minusages, args.minclients)
 
 print ("###############################")
 print ("computing repartitions ...")
