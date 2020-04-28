@@ -22,7 +22,7 @@ parser.add_argument("--minclients", default=0, type=int, help="define the minimu
 args = parser.parse_args()
 
 #########################################
-#Getting data to plot (reuse-core sizes)#
+#Getting data to plot (data quantities)#
 #########################################
 
 root_directory = args.lp
