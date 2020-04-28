@@ -15,7 +15,7 @@ def get_csv_rows_nb(path):
         f.close()
         return size
     except IOError:
-        print ("File " + path + " do not exist. You should use the script to get the reuse-core before proceeding. ")
+        print ("File " + path + " do not exist. You should use other scripts to get the reuse-core or to export library usage data before proceeding. ")
         exit()
 
 def get_csv_rows(path):
@@ -29,7 +29,7 @@ def get_csv_rows(path):
             f.close()
             return csv_data
     except IOError:
-        print ("File " + path + " do not exist. You should use the script to export library usage before proceeding. ")
+        print ("File " + path + " do not exist. You should use other scripts to get the reuse-core or to export library usage data before proceeding. ")
         exit()
 
 def get_clients_from_usage(path):
