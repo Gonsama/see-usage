@@ -227,7 +227,7 @@ def get_sorted_versions_path_timestamp(root_directory, regex, min_usages, min_cl
     versions_tuple = []
     for x in os.walk(root_directory): 
         #libraries with 0 usages not considered either
-        if x[0] != root_directory and not regex.search(x[0]) and get_csv_rows_nb(x[0] + "/library-usage.csv") >= min_usages and get_unique_clients(x[0] + "/library-usage.csv") >= min_clients:
+        if x[0] != root_directory and not regex.search(x[0]) and os.path.exists(x[0] + "/library-usage.csv") and get_csv_rows_nb(x[0] + "/library-usage.csv") >= min_usages and get_unique_clients(x[0] + "/library-usage.csv") >= min_clients:
             timestamp = get_timestamp(x[0])
             if timestamp != -1:        
                 versions_tuple.append((x[0],timestamp))
