@@ -6,7 +6,6 @@ This script exports the usage data from a database and writes it in specific csv
 ```
  python3 export.py --host localhost --user user --password 12345 --dbname api_dependencies
 
-
 ```
 
 ### data-repartition.py
@@ -43,12 +42,16 @@ This script is different from the precendent ones, it doesn't plot anything. It 
 ```
 python3 core.py --path csv-data/junit\:junit --percent 50
 
+```
+
 ### core-evolution.py
 
 This script plots the reuse-core for all the versions of a specific library. Multiple curve can be on the same plot by specifying it in argument (--p) . The library path argument must the path to the repertory containing every version of the library (the script will search for version/library-usage.csv files for each version). The precondition is that the core.py script was used on the libraries before.
 
 ```
 python3 core_evolution.py --lp csv-data/junit\:junit/  --p 20 40 60 80
+
+```
 
 ### compare-cores.py
 
@@ -57,3 +60,4 @@ This script plots the intersection of two cores on a circular diagram. The examp
 ```
 python3 compare_cores.py --cp1 csv-data/junit\:junit/4.10/reuse-core-60.csv --cp2 csv-data/junit\:junit/4.12/reuse-core-60.csv
 
+```
