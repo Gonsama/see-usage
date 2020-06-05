@@ -3,24 +3,35 @@ import csv
 import utils
 import argparse
 
-def get_immediate_subdirectories(a_dir):
-    return [name for name in os.listdir(a_dir) if os.path.isdir(os.path.join(a_dir, name))]
-
+def get_libraries_path(root_path):
+    libraries_path = []
+    for x in os.walk(root_path):
+        #searching for repertories containing a library-usage file
+        if (os.path.exists(x[0] + os.path.sep + "library-usage.csv")):
+            split_path = x[0].split(os.path.sep)
+            split_path.pop()
+            libraries_path.append(os.path.sep.join(split_path))
+            print (os.path.sep.join(split_path))
+    return list(set(libraries_path))
 
 #command-line arguments
 parser = argparse.ArgumentParser(description='Welcome!')
+parser.add_argument("--root", type=str, required=True, help="path of the root directory containing every libraries")
 parser.add_argument("--N", type=int, default=10, help="Show first N libraries")
 args = parser.parse_args()
 
 #elements of list are tuple (l,n) where l is library name, u is number of usages and c is number of unique clients
 top_libraries = []
 
-libraries = get_immediate_subdirectories("." + os.path.sep + "csv-data")
+print ("Looking for every library which contains usage data")
+
+#path of the different libraries (no duplicates)
+libraries = get_libraries_path(args.root)
+
+print ("Counting usages and clients for every library in no order (order will be ath the end)")
 for library in libraries:
-    #getting path to subdirectories containing a library-usage.csv file
-    root_directory = "." + os.path.sep + "csv-data" + os.path.sep + library
     pattern = "*library-usage.csv"
-    all_versions_path = utils.get_paths_containing_pattern(root_directory, pattern)
+    all_versions_path = utils.get_paths_containing_pattern(library, pattern)
     nb_usages = 0
     nb_clients = 0
     for version_path in all_versions_path:
