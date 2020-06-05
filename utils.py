@@ -189,7 +189,7 @@ def get_timestamp(path):
     #properties file doesnt exist
 
     # example of split path : ['csv-data', 'commons-cli', 'commons-cli', '1.3']
-    split_path = re.split(':|' + os.path.sep, path) 
+    split_path = re.split(os.path.sep, path) 
 
     url = 'https://search.maven.org/solrsearch/select?q=g:"' + split_path[len(split_path) - 3] + '"%20AND%20a:"' + split_path[len(split_path) - 2] + '"%20AND%20v:"' + split_path[len(split_path) - 1] + '"&wt=json'
 

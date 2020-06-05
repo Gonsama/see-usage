@@ -96,7 +96,7 @@ if len(y_data_members) > 0:
  
 # version written next to dot if sot argument is chosen
 if args.sot:
-    versions = [path.split(os.path.sep)[2] for path,t in versions_tuple]
+    versions = [path.split(os.path.sep)[-1] for path,t in versions_tuple]
     for i in range(0,len(x_axis)): 
         plt.text(x_axis[i], y_data_clients[i],  versions[i], fontsize=9)
 

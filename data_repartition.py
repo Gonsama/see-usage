@@ -56,7 +56,7 @@ elif args.type == "clients":
 
 #space between versions will be equal
 #split path to get only versions
-versions = [path.split(os.path.sep)[2] for path,t in versions_tuple]
+versions = [path.split(os.path.sep)[-1] for path,t in versions_tuple]
 x_axis = versions
 
 x_axis_title = "library version"

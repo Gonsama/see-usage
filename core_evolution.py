@@ -96,7 +96,7 @@ for percent,sizes in y_data.items():
 
 #if x_axis is time, we have to put the library version to at least one set of points (random set)
 if args.sot:
-    versions = [path.split(os.path.sep)[2] for path,t in versions_tuple]
+    versions = [path.split(os.path.sep)[-1] for path,t in versions_tuple]
     random_value_from_dict = random.choice(list(y_data.values()))
     for i in range(0,len(x_axis)): 
         plt.text(x_axis[i], random_value_from_dict[i],  versions[i], fontsize=9)
