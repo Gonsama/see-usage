@@ -65,7 +65,7 @@ size = len(sql_result_libraries)
 counter = 1
  
 for x in sql_result_libraries:
-    csv_file_path = "csv-data" os.path.sep + str(x[0].decode()).replace(":", os.path.sep) + os.path.sep + str(x[1].decode()) + os.path.sep + "library-usage.csv"
+    csv_file_path = "csv-data" + os.path.sep + str(x[0].decode()).replace(":", os.path.sep) + os.path.sep + str(x[1].decode()) + os.path.sep + "library-usage.csv"
     library_coordinates = str(x[0].decode()) + ":" + str(x[1].decode())
 
     #4298,403

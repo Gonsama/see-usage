@@ -225,14 +225,15 @@ def get_sorted_versions_path_timestamp(root_directory, regex, min_usages, min_cl
     """returns all versions (path, timestamp) tuple that are not matching regex and that have a minimum of usages and/or clients in a list of tuples"""
     regex = re.compile(regex)
     versions_tuple = []
-    for x in os.walk(root_directory): 
-        #libraries with 0 usages not considered either
-        if x[0] != root_directory and not regex.search(x[0]) and os.path.exists(x[0] + os.path.sep + "library-usage.csv") and get_csv_rows_nb(x[0] + os.path.sep + "library-usage.csv") >= min_usages and get_unique_clients(x[0] + os.path.sep + "library-usage.csv") >= min_clients:
+    for x in os.walk(root_directory):
+        #searching for repertories not respecting the regex in which there is a library-usage file containing at least min_usages usages and min_clients clients
+        if  not regex.search(x[0]) and os.path.exists(x[0] + os.path.sep + "library-usage.csv") and get_csv_rows_nb(x[0] + os.path.sep + "library-usage.csv") >= min_usages and get_unique_clients(x[0] + os.path.sep + "library-usage.csv") >= min_clients:
             timestamp = get_timestamp(x[0])
             if timestamp != -1:        
                 versions_tuple.append((x[0],timestamp))
     #sort list so that versions are in ascending order
     versions_tuple = sorted(versions_tuple, key=lambda tup: tup[1])
+    print (versions_tuple)
     return versions_tuple
 
 def get_x_axis_data(sot, versions_tuple):
@@ -249,6 +250,6 @@ def get_x_axis_data(sot, versions_tuple):
     else:
         #space between versions will be equal
         #split path to versions to get only versions
-        x_axis = [path.split(os.path.sep)[2] for path,t in versions_tuple]
+        x_axis = [path.split(os.path.sep)[-1] for path,t in versions_tuple]
         x_axis_title = "library version"
     return (x_axis, x_axis_title)
