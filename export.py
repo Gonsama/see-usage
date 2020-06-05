@@ -48,7 +48,7 @@ sql_result_libraries = cursor.fetchall()
 print ("different repertories being created")
 
 for x in sql_result_libraries:
-    path = "csv-data/"+ str(x[0].decode()) + "/" + str(x[1].decode())
+    path = "csv-data" + os.path.sep + str(x[0].decode()) + os.path.sep + str(x[1].decode())
     if not os.path.exists(path):
         try:
             os.makedirs(path)
@@ -65,7 +65,7 @@ size = len(sql_result_libraries)
 counter = 1
  
 for x in sql_result_libraries:
-    csv_file_path = "csv-data/"+ str(x[0].decode()) + "/" + str(x[1].decode()) + "/library-usage.csv"
+    csv_file_path = "csv-data" os.path.sep + str(x[0].decode()) + os.path.sep + str(x[1].decode()) + os.path.sep + "library-usage.csv"
     library_coordinates = str(x[0].decode()) + ":" + str(x[1].decode())
 
     #4298,403
@@ -79,7 +79,7 @@ for x in sql_result_libraries:
     myFile.writerow(columns_names)
     myFile.writerows(sql_result_usage)
     fp.close()
-    print ("csv file created for  " + library_coordinates + " (" + str(counter) + "/" + str(size) + ")")
+    print ("csv file created for  " + library_coordinates + " (" + str(counter) + os.path.sep + str(size) + ")")
     counter += 1
 
 

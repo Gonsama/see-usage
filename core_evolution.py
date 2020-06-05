@@ -41,15 +41,15 @@ print ("computing reuse-core sizes ...")
 if args.type == 1:
     for path,t in versions_tuple:
         for percent in args.p:
-            size = utils.get_csv_rows_nb(path + "/reuse-core-" + str(percent) + ".csv")
+            size = utils.get_csv_rows_nb(path + os.path.sep + "reuse-core-" + str(percent) + ".csv")
             y_data[percent].append(size)
             print ("Reuse-core size of " +  str(percent) + "% for " + path + " is " + str(size))
     y_axis_title = "reuse-core-size"
 elif args.type == 2:
     for path,t in versions_tuple:
         for percent in args.p:
-            reuse_core_size = utils.get_csv_rows_nb(path + "/reuse-core-" + str(percent) + ".csv")
-            total_used_api_size = utils.get_unique_used_members(path + "/library-usage.csv")
+            reuse_core_size = utils.get_csv_rows_nb(path + os.path.sep + "reuse-core-" + str(percent) + ".csv")
+            total_used_api_size = utils.get_unique_used_members(path + os.path.sep + "library-usage.csv")
             ratio = reuse_core_size / float(total_used_api_size)
             y_data[percent].append(ratio)
             print ("Ratio size of " +  str(percent) + "% for " + path + " is " + str(ratio))
@@ -96,7 +96,7 @@ for percent,sizes in y_data.items():
 
 #if x_axis is time, we have to put the library version to at least one set of points (random set)
 if args.sot:
-    versions = [path.split("/")[2] for path,t in versions_tuple]
+    versions = [path.split(os.path.sep)[2] for path,t in versions_tuple]
     random_value_from_dict = random.choice(list(y_data.values()))
     for i in range(0,len(x_axis)): 
         plt.text(x_axis[i], random_value_from_dict[i],  versions[i], fontsize=9)

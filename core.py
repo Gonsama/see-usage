@@ -49,9 +49,9 @@ chosen_libraries_path = utils.get_paths_containing_pattern(root_directory, patte
 for path in chosen_libraries_path:
 
     print ("###############################################")
-    print ("reading " + path + "/library-usage.csv" + "...")
+    print ("reading " + path + os.path.sep + "library-usage.csv" + "...")
 
-    with open(path + "/library-usage.csv", 'r') as f:
+    with open(path + os.path.sep + "library-usage.csv", 'r') as f:
       reader = csv.reader(f)
       csv_data = list(reader)
 
@@ -65,7 +65,7 @@ for path in chosen_libraries_path:
     
     #not necessary to compute reuse-core for empty csv file, so empty file is created for the reuse-core too   
     if len(csv_data) < 1:
-        f = open(path + "/reuse-core-" + str(reuse_core_percentage) + ".csv", "w")
+        f = open(path + os.path.sep + "reuse-core-" + str(reuse_core_percentage) + ".csv", "w")
         myFile = csv.writer(f, lineterminator = '\n')
         myFile.writerow(["reuse-core-member"])
         f.close()
@@ -124,7 +124,7 @@ for path in chosen_libraries_path:
     print ("size of reuse-core: " + str(len(reuse_core)))
 
     #writing reuse-core elements in csv file
-    f = open(path + "/reuse-core-" + str(reuse_core_percentage) + ".csv", "w")
+    f = open(path + os.path.sep + "reuse-core-" + str(reuse_core_percentage) + ".csv", "w")
     myFile = csv.writer(f, lineterminator = '\n')
     myFile.writerow(["reuse-core-member"])
     for x in reuse_core:

@@ -177,21 +177,21 @@ def get_timestamp(path):
     """return timestamp of library specified by path, returns -1 if no timestamp"""
 
     #look for properties file first, if it doesn't exist request REST api for the properties
-    if os.path.isfile(path + "/properties.json"):
-        print (path + "/properties.json exist")
-        with open(path + "/properties.json") as json_file:
+    if os.path.isfile(path + os.path.sep + "properties.json"):
+        print (path + os.path.sep + "properties.json exist")
+        with open(path + os.path.sep + "properties.json") as json_file:
             json_data = json.load(json_file)
             return get_timestamp_from_json(json_data)
     else:
-        print (path + "/properties.json do not exist" )
+        print (path + os.path.sep + "properties.json do not exist" )
 
 
     #properties file doesnt exist
 
     # example of split path : ['csv-data', 'commons-cli', 'commons-cli', '1.3']
-    split_path = re.split(':|/',path) 
+    split_path = re.split(':|' + os.path.sep, path) 
 
-    url = 'https://search.maven.org/solrsearch/select?q=g:"' + split_path[1] + '"%20AND%20a:"' + split_path[2] + '"%20AND%20v:"' + split_path[3] + '"&wt=json'
+    url = 'https://search.maven.org/solrsearch/select?q=g:"' + split_path[len(split_path) - 3] + '"%20AND%20a:"' + split_path[len(split_path) - 2] + '"%20AND%20v:"' + split_path[len(split_path) - 1] + '"&wt=json'
 
     print ("Requesting properties from REST api ...")    
 
@@ -211,7 +211,7 @@ def get_timestamp(path):
         json_data = json.loads(myResponse.content)
         
         #write data in file for next times
-        with open( path + '/properties.json', 'w') as outfile:
+        with open( path + os.path.sep + 'properties.json', 'w') as outfile:
             json.dump(json_data, outfile)        
 
         return get_timestamp_from_json(json_data)
@@ -227,7 +227,7 @@ def get_sorted_versions_path_timestamp(root_directory, regex, min_usages, min_cl
     versions_tuple = []
     for x in os.walk(root_directory): 
         #libraries with 0 usages not considered either
-        if x[0] != root_directory and not regex.search(x[0]) and os.path.exists(x[0] + "/library-usage.csv") and get_csv_rows_nb(x[0] + "/library-usage.csv") >= min_usages and get_unique_clients(x[0] + "/library-usage.csv") >= min_clients:
+        if x[0] != root_directory and not regex.search(x[0]) and os.path.exists(x[0] + os.path.sep + "library-usage.csv") and get_csv_rows_nb(x[0] + os.path.sep + "library-usage.csv") >= min_usages and get_unique_clients(x[0] + os.path.sep + "library-usage.csv") >= min_clients:
             timestamp = get_timestamp(x[0])
             if timestamp != -1:        
                 versions_tuple.append((x[0],timestamp))
@@ -249,6 +249,6 @@ def get_x_axis_data(sot, versions_tuple):
     else:
         #space between versions will be equal
         #split path to versions to get only versions
-        x_axis = [path.split("/")[2] for path,t in versions_tuple]
+        x_axis = [path.split(os.path.sep)[2] for path,t in versions_tuple]
         x_axis_title = "library version"
     return (x_axis, x_axis_title)

@@ -38,25 +38,25 @@ y_data = []
 if args.type == "usages":
     y_axis_title = "number of usages"
     for path,t in versions_tuple:
-        nb_rows = utils.get_csv_rows_nb(path + "/library-usage.csv")
+        nb_rows = utils.get_csv_rows_nb(path + os.path.sep + "library-usage.csv")
         y_data.append(nb_rows)
         print ("Number of usages for " + path + " is " + str(nb_rows))
 elif args.type == "members":
     y_axis_title = "number of unique members"
     for path,t in versions_tuple:
-        nb_unique_used_members = utils.get_unique_used_members(path + "/library-usage.csv")
+        nb_unique_used_members = utils.get_unique_used_members(path + os.path.sep + "library-usage.csv")
         y_data.append(nb_unique_used_members)
         print ("Number of members for " + path + " is " + str(nb_unique_used_members))
 elif args.type == "clients":
     y_axis_title = "number of unique clients"
     for path,t in versions_tuple:
-        nb_unique_clients = utils.get_unique_clients(path + "/library-usage.csv")
+        nb_unique_clients = utils.get_unique_clients(path + os.path.sep + "library-usage.csv")
         y_data.append(nb_unique_clients)
         print ("Number of clients for " + path + " is " + str(nb_unique_clients))
 
 #space between versions will be equal
 #split path to get only versions
-versions = [path.split("/")[2] for path,t in versions_tuple]
+versions = [path.split(os.path.sep)[2] for path,t in versions_tuple]
 x_axis = versions
 
 x_axis_title = "library version"

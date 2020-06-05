@@ -9,9 +9,9 @@ from datetime import datetime
 def get_data_to_plot(according, formula, path):
     """return diversity index according to arguments"""
     if according == "clients":
-        data = utils.get_clients_from_usage(path + "/library-usage.csv")
+        data = utils.get_clients_from_usage(path + os.path.sep + "library-usage.csv")
     elif according == "members":
-        data = utils.get_members_from_usage(path + "/library-usage.csv")
+        data = utils.get_members_from_usage(path + os.path.sep + "library-usage.csv")
     diversity = utils.get_diversity_value(data, formula)
     diversity_percent = int(diversity * 100)        
     print (formula + " index according to " + according + " for " + path + " is " + str(diversity_percent) + "%")
@@ -96,7 +96,7 @@ if len(y_data_members) > 0:
  
 # version written next to dot if sot argument is chosen
 if args.sot:
-    versions = [path.split("/")[2] for path,t in versions_tuple]
+    versions = [path.split(os.path.sep)[2] for path,t in versions_tuple]
     for i in range(0,len(x_axis)): 
         plt.text(x_axis[i], y_data_clients[i],  versions[i], fontsize=9)
 

@@ -15,17 +15,17 @@ args = parser.parse_args()
 #elements of list are tuple (l,n) where l is library name, u is number of usages and c is number of unique clients
 top_libraries = []
 
-libraries = get_immediate_subdirectories("./csv-data")
+libraries = get_immediate_subdirectories("." + os.path.sep + "csv-data")
 for library in libraries:
     #getting path to subdirectories containing a library-usage.csv file
-    root_directory = "./csv-data/" + library
+    root_directory = "." + os.path.sep + "csv-data" + os.path.sep + library
     pattern = "*library-usage.csv"
     all_versions_path = utils.get_paths_containing_pattern(root_directory, pattern)
     nb_usages = 0
     nb_clients = 0
     for version_path in all_versions_path:
-        nb_usages += utils.get_csv_rows_nb(version_path + "/library-usage.csv")
-        nb_clients += utils.get_unique_clients(version_path + "/library-usage.csv")
+        nb_usages += utils.get_csv_rows_nb(version_path + os.path.sep + "library-usage.csv")
+        nb_clients += utils.get_unique_clients(version_path + os.path.sep + "library-usage.csv")
     top_libraries.append((library ,nb_usages, nb_clients))
     print (str(len(top_libraries)) + ": " + str((library ,nb_usages, nb_clients)))
 
