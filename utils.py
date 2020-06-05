@@ -95,9 +95,7 @@ def get_diversity_value(data, formula):
     unique_data = set(data)
     n = len(unique_data)
     N = len(data)
-    #There is no diversity if there is only 1 species        
-    if n == 1:
-        return 0    
+    #There is no diversity if there is only 1 species           
     if formula == "pielou":
         pielou_index = get_pielou_index(data,unique_data,n,N)
         return pielou_index
@@ -112,6 +110,8 @@ def get_diversity_value(data, formula):
         return gini_index
 
 def get_pielou_index(data,unique_data,n,N):
+    if n == 1 or N == 0:
+        return 0 
     total_sum = 0
     for element in unique_data:
         nb_element = get_nb_occurences(element,data)
@@ -122,6 +122,8 @@ def get_pielou_index(data,unique_data,n,N):
     return evenness
 
 def get_simpson_index(data,unique_data,n,N):
+    if N == 1 or N == 0:
+        return 0 
     total_sum = 0
     for element in unique_data:
         nb_element = get_nb_occurences(element,data)
@@ -132,6 +134,8 @@ def get_simpson_index(data,unique_data,n,N):
     return simpson_index
 
 def get_theil_index(data,unique_data,n,N):
+    if n == 0 or n == 1:
+        return 1 
     total_sum = 0
     mean_occurences = float(N) / n
     for element in unique_data:
@@ -143,6 +147,8 @@ def get_theil_index(data,unique_data,n,N):
     return normalized_theil_index
 
 def get_gini_index(data,unique_data,n,N):
+    if n == 0:
+        return 1
     mean_occurences = float(N) / n
     double_sum = 0
     for x in unique_data:
@@ -189,7 +195,7 @@ def get_timestamp(path):
     #properties file doesnt exist
 
     # example of split path : ['csv-data', 'commons-cli', 'commons-cli', '1.3']
-    split_path = re.split(os.path.sep, path) 
+    split_path = path.split(os.path.sep) 
 
     url = 'https://search.maven.org/solrsearch/select?q=g:"' + split_path[len(split_path) - 3] + '"%20AND%20a:"' + split_path[len(split_path) - 2] + '"%20AND%20v:"' + split_path[len(split_path) - 1] + '"&wt=json'
 
@@ -233,7 +239,6 @@ def get_sorted_versions_path_timestamp(root_directory, regex, min_usages, min_cl
                 versions_tuple.append((x[0],timestamp))
     #sort list so that versions are in ascending order
     versions_tuple = sorted(versions_tuple, key=lambda tup: tup[1])
-    print (versions_tuple)
     return versions_tuple
 
 def get_x_axis_data(sot, versions_tuple):
