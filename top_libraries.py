@@ -11,7 +11,6 @@ def get_libraries_path(root_path):
             split_path = x[0].split(os.path.sep)
             split_path.pop()
             libraries_path.append(os.path.sep.join(split_path))
-            print (os.path.sep.join(split_path))
     return list(set(libraries_path))
 
 #command-line arguments
@@ -23,12 +22,12 @@ args = parser.parse_args()
 #elements of list are tuple (l,n) where l is library name, u is number of usages and c is number of unique clients
 top_libraries = []
 
-print ("Looking for every library which contains usage data")
+print ("Looking for every libraries which contains usage data")
 
 #path of the different libraries (no duplicates)
 libraries = get_libraries_path(args.root)
 
-print ("Counting usages and clients for every library in no order (order will be ath the end)")
+print ("Counting usages and clients for every library in no order (order will be at the end)")
 for library in libraries:
     pattern = "*library-usage.csv"
     all_versions_path = utils.get_paths_containing_pattern(library, pattern)
