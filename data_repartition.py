@@ -46,13 +46,13 @@ elif args.type == "members":
     for path,t in versions_tuple:
         nb_unique_used_members = utils.get_unique_used_members(path + os.path.sep + "library-usage.csv")
         y_data.append(nb_unique_used_members)
-        print ("Number of members for " + path + " is " + str(nb_unique_used_members))
+        print ("Number of members used for " + path + " is " + str(nb_unique_used_members))
 elif args.type == "clients":
     y_axis_title = "number of unique clients"
     for path,t in versions_tuple:
         nb_unique_clients = utils.get_unique_clients(path + os.path.sep + "library-usage.csv")
         y_data.append(nb_unique_clients)
-        print ("Number of clients for " + path + " is " + str(nb_unique_clients))
+        print ("Number of unique clients for " + path + " is " + str(nb_unique_clients))
 
 #space between versions will be equal
 #split path to get only versions
