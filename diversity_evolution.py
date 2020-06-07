@@ -6,17 +6,6 @@ import matplotlib.dates as md
 import random
 from datetime import datetime
 
-def get_data_to_plot(according, formula, path):
-    """return diversity index according to arguments"""
-    if according == "clients":
-        data = utils.get_clients_from_usage(path + os.path.sep + "library-usage.csv")
-    elif according == "members":
-        data = utils.get_members_from_usage(path + os.path.sep + "library-usage.csv")
-    diversity = utils.get_diversity_value(data, formula)
-    diversity_percent = int(diversity * 100)        
-    print (formula + " index according to " + according + " for " + path + " is " + str(diversity_percent) + "%")
-    return diversity_percent
-
 ########################
 #Command-line arguments#
 ########################
@@ -47,12 +36,12 @@ print ("###############################")
 print ("computing diversity indexes ...")
 for path,t in versions_tuple:
     if args.according == "clients":
-        y_data_clients.append(get_data_to_plot("clients", args.formula, path))
+        y_data_clients.append(utils.get_data_to_plot("clients", args.formula, path))
     elif args.according == "members":
-        y_data_members.append(get_data_to_plot("members", args.formula, path))
+        y_data_members.append(utils.get_data_to_plot("members", args.formula, path))
     elif args.according == "clients/members":
-        y_data_clients.append(get_data_to_plot("clients", args.formula, path))
-        y_data_members.append(get_data_to_plot("members", args.formula, path))
+        y_data_clients.append(utils.get_data_to_plot("clients", args.formula, path))
+        y_data_members.append(utils.get_data_to_plot("members", args.formula, path))
 
 y_axis_title = "Diversity of " + args.according + " using " + args.formula + "(%)"
 
